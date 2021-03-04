@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 class AliceCallResponseWidget extends StatefulWidget {
   final AliceHttpCall call;
 
-  AliceCallResponseWidget(this.call)
-      : assert(call != null, "call can't be null");
+  AliceCallResponseWidget(this.call);
 
   @override
   State<StatefulWidget> createState() {
@@ -54,11 +53,16 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildGeneralDataRows() {
-    List<Widget> rows = [];
-    rows.add(getListRow("Received:", _call.response.time.toString()));
-    rows.add(getListRow("Bytes received:", formatBytes(_call.response.size)));
+    final response = _call.response;
+    if (response == null) {
+      return [];
+    }
 
-    var status = _call.response.status;
+    List<Widget> rows = [];
+    rows.add(getListRow("Received:", response.time.toString()));
+    rows.add(getListRow("Bytes received:", formatBytes(response.size)));
+
+    var status = response.status;
     var statusText = "$status";
     if (status == -1) {
       statusText = "Error";
@@ -69,18 +73,21 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildHeadersRows() {
+    final response = _call.response;
+    if (response == null) {
+      return [];
+    }
+
     List<Widget> rows = [];
-    var headers = _call.response.headers;
+    var headers = response.headers;
     var headersContent = "Headers are empty";
-    if (headers != null && headers.length > 0) {
+    if (headers.length > 0) {
       headersContent = "";
     }
     rows.add(getListRow("Headers: ", headersContent));
-    if (_call.response.headers != null) {
-      _call.response.headers.forEach((header, value) {
-        rows.add(getListRow("   • $header:", value.toString()));
-      });
-    }
+    response.headers.forEach((header, value) {
+      rows.add(getListRow("   • $header:", value.toString()));
+    });
     return rows;
   }
 
@@ -120,13 +127,13 @@ class _AliceCallResponseWidgetState
             fit: BoxFit.fill,
             headers: _buildRequestHeaders(),
             loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent loadingProgress) {
+                ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) return child;
               return Center(
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes
+                          (loadingProgress.expectedTotalBytes ?? 1)
                       : null,
                 ),
               );
@@ -140,12 +147,17 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildLargeBodyTextRows() {
+    final response = _call.response;
+    if (response == null) {
+      return [];
+    }
+
     List<Widget> rows = [];
     if (_showLargeBody) {
       return _buildTextBodyRows();
     } else {
       rows.add(getListRow("Body:",
-          "Too large to show (${_call.response.body.toString().length} Bytes)"));
+          "Too large to show (${response.body.toString().length} Bytes)"));
       rows.add(const SizedBox(height: 8));
       rows.add(
         RaisedButton(
@@ -165,21 +177,31 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildTextBodyRows() {
+    final response = _call.response;
+    if (response == null) {
+      return [];
+    }
+
     List<Widget> rows = [];
-    var headers = _call.response.headers;
-    var bodyContent = formatBody(_call.response.body, getContentType(headers));
+    var headers = response.headers;
+    var bodyContent = formatBody(response.body, getContentType(headers));
     rows.add(getListRow("Body:", bodyContent));
     return rows;
   }
 
   List<Widget> _buildUnknownBodyRows() {
+    final response = _call.response;
+    if (response == null) {
+      return [];
+    }
+
     List<Widget> rows = [];
-    var headers = _call.response.headers;
-    var contentType = getContentType(headers) ?? "<unknown>";
+    var headers = response.headers;
+    var contentType = getContentType(headers);
 
     if (_showUnsupportedBody) {
       var bodyContent =
-          formatBody(_call.response.body, getContentType(headers));
+          formatBody(response.body, getContentType(headers));
       rows.add(getListRow("Body:", bodyContent));
     } else {
       rows.add(getListRow(
@@ -205,15 +227,19 @@ class _AliceCallResponseWidgetState
 
   Map<String, String> _buildRequestHeaders() {
     Map<String, String> requestHeaders = Map();
-    if (_call?.request?.headers != null) {
-      requestHeaders.addAll(
-        _call.request.headers.map(
-          (String key, dynamic value) {
-            return MapEntry(key, value.toString());
-          },
-        ),
-      );
+
+    final request = _call.request;
+    if (request == null) {
+      return requestHeaders;
     }
+
+    requestHeaders.addAll(
+      request.headers.map(
+        (String key, dynamic value) {
+          return MapEntry(key, value.toString());
+        },
+      ),
+    );
     return requestHeaders;
   }
 
@@ -233,11 +259,11 @@ class _AliceCallResponseWidgetState
   }
 
   String _getContentTypeOfResponse() {
-    return getContentType(_call.response.headers);
+    return getContentType(_call.response?.headers ?? {});
   }
 
   bool _isLargeResponseBody() {
-    return _call.response.body != null &&
-        _call.response.body.toString().length > _kLargeOutputSize;
+    return _call.response?.body != null &&
+        (_call.response?.body?.toString() ?? '').length > _kLargeOutputSize;
   }
 }

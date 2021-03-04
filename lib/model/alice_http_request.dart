@@ -11,6 +11,6 @@ class AliceHttpRequest {
   String contentType = "";
   List<Cookie> cookies = [];
   Map<String, dynamic> queryParameters = Map();
-  List<AliceFormDataFile> formDataFiles;
-  List<AliceFormDataField> formDataFields;
+  List<AliceFormDataFile> formDataFiles = [];
+  List<AliceFormDataField> formDataFields = [];
 }

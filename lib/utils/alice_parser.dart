@@ -34,11 +34,10 @@ class AliceParser {
 
       var bodyContent = _emptyBody;
 
-      if (contentType == null ||
-          !contentType.toLowerCase().contains(_applicationJson)) {
+      if (!contentType.toLowerCase().contains(_applicationJson)) {
         var bodyTemp = body.toString();
 
-        if (bodyTemp != null && bodyTemp.length > 0) {
+        if (bodyTemp.length > 0) {
           bodyContent = bodyTemp;
         }
       } else {
@@ -65,13 +64,11 @@ class AliceParser {
   }
 
   static String getContentType(Map<String, dynamic> headers) {
-    if (headers != null) {
-      if (headers.containsKey(_jsonContentTypeSmall)) {
-        return headers[_jsonContentTypeSmall];
-      }
-      if (headers.containsKey(_jsonContentTypeBig)) {
-        return headers[_jsonContentTypeBig];
-      }
+    if (headers.containsKey(_jsonContentTypeSmall)) {
+      return headers[_jsonContentTypeSmall];
+    }
+    if (headers.containsKey(_jsonContentTypeBig)) {
+      return headers[_jsonContentTypeBig];
     }
     return _unknownContentType;
   }

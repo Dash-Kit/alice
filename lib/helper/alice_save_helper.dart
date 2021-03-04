@@ -15,7 +15,6 @@ class AliceSaveHelper {
   }
 
   static String _buildCallLog(AliceHttpCall call) {
-    assert(call != null, "call can't be null");
     StringBuffer stringBuffer = StringBuffer();
     stringBuffer.write("===========================================\n");
     stringBuffer.write("Id: ${call.id}\n");
@@ -34,34 +33,34 @@ class AliceSaveHelper {
     stringBuffer.write("--------------------------------------------\n");
     stringBuffer.write("Request\n");
     stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("Request time: ${call.request.time}\n");
-    stringBuffer.write("Request content type: ${call.request.contentType}\n");
+    stringBuffer.write("Request time: ${call.request?.time}\n");
+    stringBuffer.write("Request content type: ${call.request?.contentType}\n");
     stringBuffer
-        .write("Request cookies: ${_encoder.convert(call.request.cookies)}\n");
+        .write("Request cookies: ${_encoder.convert(call.request?.cookies)}\n");
     stringBuffer
-        .write("Request headers: ${_encoder.convert(call.request.headers)}\n");
+        .write("Request headers: ${_encoder.convert(call.request?.headers)}\n");
     stringBuffer.write(
-        "Request size: ${AliceConversionHelper.formatBytes(call.request.size)}\n");
+        "Request size: ${AliceConversionHelper.formatBytes(call.request?.size ?? 0)}\n");
     stringBuffer.write(
-        "Request body: ${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}\n");
+        "Request body: ${AliceParser.formatBody(call.request?.body, AliceParser.getContentType(call.request?.headers ?? {}))}\n");
     stringBuffer.write("--------------------------------------------\n");
     stringBuffer.write("Response\n");
     stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("Response time: ${call.response.time}\n");
-    stringBuffer.write("Response status: ${call.response.status}\n");
+    stringBuffer.write("Response time: ${call.response?.time}\n");
+    stringBuffer.write("Response status: ${call.response?.status}\n");
     stringBuffer.write(
-        "Response size: ${AliceConversionHelper.formatBytes(call.response.size)}\n");
+        "Response size: ${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}\n");
     stringBuffer.write(
-        "Response headers: ${_encoder.convert(call.response.headers)}\n");
+        "Response headers: ${_encoder.convert(call.response?.headers)}\n");
     stringBuffer.write(
-        "Response body: ${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}\n");
+        "Response body: ${AliceParser.formatBody(call.response?.body, AliceParser.getContentType(call.response?.headers ?? {}))}\n");
     if (call.error != null) {
       stringBuffer.write("--------------------------------------------\n");
       stringBuffer.write("Error\n");
       stringBuffer.write("--------------------------------------------\n");
-      stringBuffer.write("Error: ${call.error.error}\n");
-      if (call.error.stackTrace != null) {
-        stringBuffer.write("Error stacktrace: ${call.error.stackTrace}\n");
+      stringBuffer.write("Error: ${call.error?.error}\n");
+      if (call.error?.stackTrace != null) {
+        stringBuffer.write("Error stacktrace: ${call.error?.stackTrace}\n");
       }
     }
     stringBuffer.write("--------------------------------------------\n");
@@ -76,7 +75,6 @@ class AliceSaveHelper {
   }
 
   static Future<String> buildCallLog(AliceHttpCall call) async {
-    assert(call != null, "call can't be null");
     try {
       return await _buildAliceLog() + _buildCallLog(call);
     } catch (exception) {

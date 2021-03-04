@@ -7,28 +7,23 @@ class AliceAlertHelper {
     String title,
     String description, {
     String firstButtonTitle = "Accept",
-    String secondButtonTitle,
-    Function firstButtonAction,
-    Function secondButtonAction,
-    Brightness brightness,
+    String? secondButtonTitle,
+    Function? firstButtonAction,
+    Function? secondButtonAction,
+    Brightness? brightness,
   }) {
-    assert(context != null, "context can't be null");
-    assert(title != null, "title can't be null");
-    assert(description != null, "description can't be null");
     List<Widget> actions = [];
-    if (firstButtonTitle != null) {
-      actions.add(
-        TextButton(
-          child: Text(firstButtonTitle),
-          onPressed: () {
-            if (firstButtonAction != null) {
-              firstButtonAction();
-            }
-            Navigator.of(context).pop();
-          },
-        ),
-      );
-    }
+    actions.add(
+      TextButton(
+        child: Text(firstButtonTitle),
+        onPressed: () {
+          if (firstButtonAction != null) {
+            firstButtonAction();
+          }
+          Navigator.of(context).pop();
+        },
+      ),
+    );
     if (secondButtonTitle != null) {
       actions.add(
         TextButton(

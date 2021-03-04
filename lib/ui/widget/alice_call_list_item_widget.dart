@@ -8,9 +8,7 @@ class AliceCallListItemWidget extends StatelessWidget {
   final AliceHttpCall call;
   final Function itemClickAction;
 
-  const AliceCallListItemWidget(this.call, this.itemClickAction)
-      : assert(call != null, "call can't be null"),
-        assert(itemClickAction != null, "itemClickAction can't be null");
+  const AliceCallListItemWidget(this.call, this.itemClickAction);
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +90,7 @@ class AliceCallListItemWidget extends StatelessWidget {
       children: [
         Flexible(
             flex: 1,
-            child: Text(_formatTime(call.request.time),
+            child: Text(_formatTime(call.request?.time),
                 style: TextStyle(fontSize: 12))),
         Flexible(
             flex: 1,
@@ -101,8 +99,8 @@ class AliceCallListItemWidget extends StatelessWidget {
         Flexible(
           flex: 1,
           child: Text(
-            "${AliceConversionHelper.formatBytes(call.request.size)} / "
-            "${AliceConversionHelper.formatBytes(call.response.size)}",
+            "${AliceConversionHelper.formatBytes(call.request?.size ?? 0)} / "
+            "${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}",
             style: TextStyle(fontSize: 12),
           ),
         )
@@ -114,8 +112,11 @@ class AliceCallListItemWidget extends StatelessWidget {
     return Container(height: 1, color: AliceConstants.grey);
   }
 
-  String _formatTime(DateTime time) {
-    assert(time != null, "time can't be null");
+  String _formatTime(DateTime? time) {
+    if (time == null) {
+      return '';
+    }
+
     return "${formatTimeUnit(time.hour)}:"
         "${formatTimeUnit(time.minute)}:"
         "${formatTimeUnit(time.second)}:"
@@ -123,12 +124,10 @@ class AliceCallListItemWidget extends StatelessWidget {
   }
 
   String formatTimeUnit(int timeUnit) {
-    assert(timeUnit != null, "timeUnit  can't be null");
     return (timeUnit < 10) ? "0$timeUnit" : "$timeUnit";
   }
 
   Widget _buildResponseColumn(BuildContext context) {
-    assert(context != null, "context can't be null");
     List<Widget> widgets = [];
     if (call.loading) {
       widgets.add(
@@ -166,12 +165,11 @@ class AliceCallListItemWidget extends StatelessWidget {
   }
 
   Color _getStatusTextColor(BuildContext context) {
-    assert(context != null, "context can't be null");
-    int status = call.response.status;
+    int status = call.response?.status ?? -1;
     if (status == -1) {
       return AliceConstants.red;
     } else if (status < 200) {
-      return Theme.of(context).textTheme.bodyText1.color;
+      return Theme.of(context).textTheme.bodyText1?.color ?? Colors.green;
     } else if (status >= 200 && status < 300) {
       return AliceConstants.green;
     } else if (status >= 300 && status < 400) {
@@ -179,7 +177,7 @@ class AliceCallListItemWidget extends StatelessWidget {
     } else if (status >= 400 && status < 600) {
       return AliceConstants.red;
     } else {
-      return Theme.of(context).textTheme.bodyText1.color;
+      return Theme.of(context).textTheme.bodyText1?.color ?? Colors.black;
     }
   }
 
@@ -191,8 +189,10 @@ class AliceCallListItemWidget extends StatelessWidget {
     }
   }
 
-  String _getStatus(AliceHttpResponse response) {
-    assert(response != null, "response can't be null");
+  String _getStatus(AliceHttpResponse? response) {
+    if (response == null) {
+      return 'null';
+    }
     if (response.status == -1) {
       return "ERR";
     } else if (response.status == 0) {

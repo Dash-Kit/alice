@@ -18,11 +18,10 @@ class AliceCore {
   GlobalKey<NavigatorState> _navigatorKey;
   Brightness _brightness = Brightness.light;
   bool _isInspectorOpened = false;
-  StreamSubscription _callsSubscription;
+  StreamSubscription? _callsSubscription;
 
   /// Creates alice core instance
-  AliceCore(this._navigatorKey, this.darkTheme)
-      : assert(darkTheme != null, "darkTheme can't be null") {
+  AliceCore(this._navigatorKey, this.darkTheme) {
     _brightness = darkTheme ? Brightness.dark : Brightness.light;
   }
 
@@ -37,7 +36,6 @@ class AliceCore {
 
   /// Set custom navigation key. This will help if there's route library.
   void setNavigatorKey(GlobalKey<NavigatorState> navigatorKey) {
-    assert(navigatorKey != null, "navigatorKey can't be null");
     this._navigatorKey = navigatorKey;
   }
 
@@ -62,19 +60,16 @@ class AliceCore {
   }
 
   /// Get context from navigator key. Used to open inspector route.
-  BuildContext getContext() => _navigatorKey?.currentState?.overlay?.context;
+  BuildContext? getContext() => _navigatorKey.currentState?.overlay?.context;
 
   /// Add alice http call to calls subject
   void addCall(AliceHttpCall call) {
-    assert(call != null, "call can't be null");
-    callsSubject.add([...callsSubject.value, call]);
+    callsSubject.add([...?callsSubject.value, call]);
   }
 
   /// Add error to exisng alice http call
   void addError(AliceHttpError error, int requestId) {
-    assert(error != null, "error can't be null");
-    assert(requestId != null, "requestId can't be null");
-    AliceHttpCall selectedCall = _selectCall(requestId);
+    AliceHttpCall? selectedCall = _selectCall(requestId);
 
     if (selectedCall == null) {
       print("Selected call is null");
@@ -82,14 +77,18 @@ class AliceCore {
     }
 
     selectedCall.error = error;
-    callsSubject.add([...callsSubject.value]);
+    callsSubject.add([...?callsSubject.value]);
   }
 
   /// Add response to existing alice http call
-  void addResponse(AliceHttpResponse response, int requestId) {
+  void addResponse(AliceHttpResponse? response, int? requestId) {
     assert(response != null, "response can't be null");
     assert(requestId != null, "requestId can't be null");
-    AliceHttpCall selectedCall = _selectCall(requestId);
+    if (response == null || requestId == null) {
+      return;
+    }
+
+    AliceHttpCall? selectedCall = _selectCall(requestId);
 
     if (selectedCall == null) {
       print("Selected call is null");
@@ -97,21 +96,19 @@ class AliceCore {
     }
     selectedCall.loading = false;
     selectedCall.response = response;
-    selectedCall.duration = response.time.millisecondsSinceEpoch -
-        selectedCall.request.time.millisecondsSinceEpoch;
+    if (selectedCall.request?.time.millisecondsSinceEpoch != null) {
+      selectedCall.duration = response.time.millisecondsSinceEpoch -
+          selectedCall.request!.time.millisecondsSinceEpoch;
+    }
 
-    callsSubject.add([...callsSubject.value]);
+    callsSubject.add([...?callsSubject.value]);
   }
 
   /// Add alice http call to calls subject
   void addHttpCall(AliceHttpCall aliceHttpCall) {
-    assert(aliceHttpCall != null, "Http call can't be null");
-    assert(aliceHttpCall.id != null, "Http call id can't be null");
     assert(aliceHttpCall.request != null, "Http call request can't be null");
     assert(aliceHttpCall.response != null, "Http call response can't be null");
-    assert(aliceHttpCall.endpoint != null, "Http call endpoint can't be null");
-    assert(aliceHttpCall.server != null, "Http call server can't be null");
-    callsSubject.add([...callsSubject.value, aliceHttpCall]);
+    callsSubject.add([...?callsSubject.value, aliceHttpCall]);
   }
 
   /// Remove all calls from calls subject
@@ -119,6 +116,6 @@ class AliceCore {
     callsSubject.add([]);
   }
 
-  AliceHttpCall _selectCall(int requestId) => callsSubject.value
-      .firstWhere((call) => call.id == requestId, orElse: null);
+  AliceHttpCall? _selectCall(int requestId) => callsSubject.value
+      ?.firstWhere((call) => call.id == requestId, orElse: null);
 }

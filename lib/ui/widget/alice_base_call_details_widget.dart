@@ -9,8 +9,6 @@ abstract class AliceBaseCallDetailsWidgetState<T extends StatefulWidget>
   final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
 
   Widget getListRow(String name, String value) {
-    assert(name != null, "name can't be null");
-    assert(value != null, "value can't be null");
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

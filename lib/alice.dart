@@ -18,20 +18,30 @@ class Alice {
   AliceHttpClientAdapter _httpClientAdapter;
   AliceHttpAdapter _httpAdapter;
 
+  Alice._(this.darkTheme, this._navigatorKey, this._aliceCore,
+      this._httpClientAdapter, this._httpAdapter);
+
   /// Creates alice instance.
-  Alice(
-      {GlobalKey<NavigatorState> navigatorKey,
-      this.darkTheme = false,})
-      : assert(darkTheme != null, "darkTheme can't be null") {
-    _navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>();
-    _aliceCore = AliceCore(_navigatorKey, darkTheme);
-    _httpClientAdapter = AliceHttpClientAdapter(_aliceCore);
-    _httpAdapter = AliceHttpAdapter(_aliceCore);
+  factory Alice({
+    GlobalKey<NavigatorState> navigatorKey =
+        const GlobalObjectKey<NavigatorState>('AliceNavigatorState'),
+    bool darkTheme = false,
+  }) {
+    final aliceCore = AliceCore(navigatorKey, darkTheme);
+    final httpClientAdapter = AliceHttpClientAdapter(aliceCore);
+    final httpAdapter = AliceHttpAdapter(aliceCore);
+
+    return Alice._(
+      darkTheme,
+      navigatorKey,
+      aliceCore,
+      httpClientAdapter,
+      httpAdapter,
+    );
   }
 
   /// Set custom navigation key. This will help if there's route library.
   void setNavigatorKey(GlobalKey<NavigatorState> navigatorKey) {
-    assert(navigatorKey != null, "navigatorKey can't be null");
     _aliceCore.setNavigatorKey(navigatorKey);
   }
 
@@ -47,7 +57,6 @@ class Alice {
 
   /// Handle request from HttpClient
   void onHttpClientRequest(HttpClientRequest request, {dynamic body}) {
-    assert(request != null, "httpClientRequest can't be null");
     _httpClientAdapter.onRequest(request, body: body);
   }
 
@@ -55,14 +64,11 @@ class Alice {
   void onHttpClientResponse(
       HttpClientResponse response, HttpClientRequest request,
       {dynamic body}) {
-    assert(response != null, "httpClientResponse can't be null");
-    assert(request != null, "httpClientRequest can't be null");
     _httpClientAdapter.onResponse(response, request, body: body);
   }
 
   /// Handle both request and response from http package
   void onHttpResponse(http.Response response, {dynamic body}) {
-    assert(response != null, "response can't be null");
     _httpAdapter.onResponse(response, body: body);
   }
 
@@ -74,12 +80,8 @@ class Alice {
 
   /// Handle generic http call. Can be used to any http client.
   void addHttpCall(AliceHttpCall aliceHttpCall) {
-    assert(aliceHttpCall != null, "Http call can't be null");
-    assert(aliceHttpCall.id != null, "Http call id can't be null");
     assert(aliceHttpCall.request != null, "Http call request can't be null");
     assert(aliceHttpCall.response != null, "Http call response can't be null");
-    assert(aliceHttpCall.endpoint != null, "Http call endpoint can't be null");
-    assert(aliceHttpCall.server != null, "Http call server can't be null");
     _aliceCore.addCall(aliceHttpCall);
   }
 }

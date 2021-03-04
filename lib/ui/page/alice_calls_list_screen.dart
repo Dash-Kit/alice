@@ -196,7 +196,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
 
   void _onListItemClicked(AliceHttpCall call) {
     Navigator.push(
-      widget._aliceCore.getContext(),
+      widget._aliceCore.getContext()!,
       MaterialPageRoute(
         builder: (context) => AliceCallDetailsScreen(call, widget._aliceCore),
       ),
@@ -221,7 +221,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
 
   void _showStatsScreen() {
     Navigator.push(
-      aliceCore.getContext(),
+      aliceCore.getContext()!,
       MaterialPageRoute(
         builder: (context) => AliceStatsScreen(widget._aliceCore),
       ),
@@ -233,7 +233,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   }
 
   Future<void> _shareLogs() async {
-    final logs = aliceCore.callsSubject.value;
+    final logs = aliceCore.callsSubject.value ?? [];
     final file = await saveLogs(logs);
     shareFile(file);
     return;

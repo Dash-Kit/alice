@@ -13,9 +13,9 @@ class AliceHttpCall {
   String uri = "";
   int duration = 0;
 
-  AliceHttpRequest request;
-  AliceHttpResponse response;
-  AliceHttpError error;
+  AliceHttpRequest? request;
+  AliceHttpResponse? response;
+  AliceHttpError? error;
 
   AliceHttpCall(this.id) {
     loading = true;
@@ -27,10 +27,14 @@ class AliceHttpCall {
   }
 
   String getCurlCommand() {
+    if (request == null) {
+      return '';
+    }
+
     var compressed = false;
     var curlCmd = "curl";
     curlCmd += " -X " + method;
-    var headers = request.headers;
+    var headers = request!.headers;
     headers.forEach((key, value) {
       if ("Accept-Encoding" == key && "gzip" == value) {
         compressed = true;
@@ -38,8 +42,8 @@ class AliceHttpCall {
       curlCmd += " -H \'$key: $value\'";
     });
 
-    String requestBody = request.body.toString();
-    if (requestBody != null && requestBody != '') {
+    String requestBody = request!.body.toString();
+    if (requestBody != '') {
       // try to keep to a single line and use a subshell to preserve any line breaks
       curlCmd += " --data \$'" + requestBody.replaceAll("\n", "\\n") + "'";
     }
