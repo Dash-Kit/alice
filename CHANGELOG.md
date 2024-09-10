@@ -1,3 +1,6 @@
+## [3.8.1]
+- Bump dependencies (share_plus from 9 to 10)
+
 ## [3.8.0]
 - Bump dependencies
 
