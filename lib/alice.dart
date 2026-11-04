@@ -7,6 +7,7 @@ import 'package:alice_lightweight/core/alice_dio_interceptor.dart';
 import 'package:alice_lightweight/core/alice_http_client_adapter.dart';
 import 'package:alice_lightweight/model/alice_http_call.dart';
 import 'package:alice_lightweight/utils/alice_custom_colors.dart';
+import 'package:alice_lightweight/utils/alice_share_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:share_plus/share_plus.dart';
@@ -46,15 +47,17 @@ class Alice {
     AliceCustomColors customColors = const AliceCustomColors(),
     void Function(AliceHttpCall aliceHttpCall)? quickShareAction,
   }) {
+    late final AliceCore aliceCore;
     final defaultQuickShareAction = (call) {
       SharePlus.instance.share(
         ShareParams(
           text: call.getCurlCommand(),
           subject: 'cURL Command',
+          sharePositionOrigin: sharePositionOrigin(aliceCore.getContext()),
         ),
       );
     };
-    final aliceCore = AliceCore(
+    aliceCore = AliceCore(
       navigatorKey,
       customColors,
       quickShareAction ?? defaultQuickShareAction,

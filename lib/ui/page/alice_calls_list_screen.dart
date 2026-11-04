@@ -27,6 +27,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   final TextEditingController _queryTextEditingController =
       TextEditingController();
   List<AliceMenuItem> _menuItems = [];
+  final GlobalKey _menuButtonKey = GlobalKey();
 
   _AliceCallsListScreenState() {
     _menuItems.add(AliceMenuItem("Delete", Icons.delete));
@@ -85,6 +86,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
 
   Widget _buildMenuButton() {
     return PopupMenuButton<AliceMenuItem>(
+      key: _menuButtonKey,
       onSelected: (AliceMenuItem item) => _onMenuItemSelected(item),
       itemBuilder: (BuildContext context) {
         return _menuItems.map((AliceMenuItem item) {
@@ -248,7 +250,10 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   Future<void> _shareLogs() async {
     final logs = aliceCore.callsSubject.value;
     final file = await saveLogs(logs);
-    shareFile(file);
+    shareFile(
+      file,
+      sharePositionOrigin: sharePositionOrigin(_menuButtonKey.currentContext),
+    );
     return;
   }
 }

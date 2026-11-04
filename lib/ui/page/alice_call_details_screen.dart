@@ -7,6 +7,7 @@ import 'package:alice_lightweight/ui/widget/alice_call_request_widget.dart';
 import 'package:alice_lightweight/ui/widget/alice_call_response_widget.dart';
 import 'package:alice_lightweight/utils/alice_constants.dart';
 import 'package:alice_lightweight/utils/alice_custom_colors.dart';
+import 'package:alice_lightweight/utils/alice_share_logs.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -72,19 +73,23 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
         floatingActionButton: GestureDetector(
           key: Key('quick_share_action_key'),
           onLongPress: () => widget.core.quickShareAction?.call(call),
-          child: FloatingActionButton(
-            backgroundColor: AliceConstants.lightRed(widget.customColors),
-            key: Key('share_key'),
-            onPressed: () async {
-              SharePlus.instance.share(
-                ShareParams(
-                  title: 'Alice - HTTP Call Details',
-                  subject: 'Request Details',
-                  text: await _getSharableResponseString(),
-                ),
-              );
-            },
-            child: Icon(Icons.share, color: Colors.white),
+          child: Builder(
+            builder: (buttonContext) => FloatingActionButton(
+              backgroundColor: AliceConstants.lightRed(widget.customColors),
+              key: Key('share_key'),
+              onPressed: () async {
+                final origin = sharePositionOrigin(buttonContext);
+                SharePlus.instance.share(
+                  ShareParams(
+                    title: 'Alice - HTTP Call Details',
+                    subject: 'Request Details',
+                    text: await _getSharableResponseString(),
+                    sharePositionOrigin: origin,
+                  ),
+                );
+              },
+              child: Icon(Icons.share, color: Colors.white),
+            ),
           ),
         ),
         appBar: AppBar(
