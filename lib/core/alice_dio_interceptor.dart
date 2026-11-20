@@ -18,10 +18,7 @@ class AliceDioInterceptor extends InterceptorsWrapper {
 
   /// Handles dio request and creates alice http call based on it
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     AliceHttpCall call = new AliceHttpCall(options.hashCode);
 
     Uri uri = options.uri;
@@ -59,8 +56,13 @@ class AliceDioInterceptor extends InterceptorsWrapper {
         if (data.files.isNotEmpty == true) {
           List<AliceFormDataFile> files = [];
           data.files.forEach((entry) {
-            files.add(AliceFormDataFile(entry.value.filename ?? '',
-                entry.value.contentType.toString(), entry.value.length));
+            files.add(
+              AliceFormDataFile(
+                entry.value.filename ?? '',
+                entry.value.contentType.toString(),
+                entry.value.length,
+              ),
+            );
           });
 
           request.formDataFiles = files;
@@ -85,10 +87,7 @@ class AliceDioInterceptor extends InterceptorsWrapper {
 
   /// Handles dio response and adds data to alice http call
   @override
-  void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     var httpResponse = AliceHttpResponse();
     httpResponse.status = response.statusCode ?? -1;
 
@@ -114,10 +113,7 @@ class AliceDioInterceptor extends InterceptorsWrapper {
 
   /// Handles error and adds data to alice http call
   @override
-  void onError(
-    DioException error,
-    ErrorInterceptorHandler handler,
-  ) {
+  void onError(DioException error, ErrorInterceptorHandler handler) {
     var httpError = AliceHttpError();
     httpError.error = error.toString();
     if (error is Error) {
@@ -139,8 +135,9 @@ class AliceDioInterceptor extends InterceptorsWrapper {
         httpResponse.size = 0;
       } else {
         httpResponse.body = error.response?.data;
-        httpResponse.size =
-            utf8.encode(error.response?.data.toString() ?? '').length;
+        httpResponse.size = utf8
+            .encode(error.response?.data.toString() ?? '')
+            .length;
       }
       Map<String, String> headers = Map();
       error.response?.headers.forEach((header, values) {

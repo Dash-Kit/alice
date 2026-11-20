@@ -21,7 +21,8 @@ Rect? sharePositionOrigin(BuildContext? context) {
 
 Future<XFile> saveLogs(List<AliceHttpCall> logs) async {
   final callStrings = await Future.wait(
-      logs.map((log) async => await AliceSaveHelper.buildCallLog(log)));
+    logs.map((log) async => await AliceSaveHelper.buildCallLog(log)),
+  );
 
   final String logsString = callStrings.fold('', (value, log) {
     if (value.isEmpty) {

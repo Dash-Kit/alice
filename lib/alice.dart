@@ -23,8 +23,13 @@ class Alice {
   AliceHttpClientAdapter _httpClientAdapter;
   AliceHttpAdapter _httpAdapter;
 
-  Alice._(this.darkTheme, this._navigatorKey, this._aliceCore,
-      this._httpClientAdapter, this._httpAdapter);
+  Alice._(
+    this.darkTheme,
+    this._navigatorKey,
+    this._aliceCore,
+    this._httpClientAdapter,
+    this._httpAdapter,
+  );
 
   /// Creates alice instance.
   /// Usage Example
@@ -66,7 +71,12 @@ class Alice {
     final httpAdapter = AliceHttpAdapter(aliceCore);
 
     return Alice._(
-        darkTheme, navigatorKey, aliceCore, httpClientAdapter, httpAdapter);
+      darkTheme,
+      navigatorKey,
+      aliceCore,
+      httpClientAdapter,
+      httpAdapter,
+    );
   }
 
   /// Set custom navigation key. This will help if there's route library.
@@ -91,8 +101,10 @@ class Alice {
 
   /// Handle response from HttpClient
   void onHttpClientResponse(
-      HttpClientResponse response, HttpClientRequest request,
-      {dynamic body}) {
+    HttpClientResponse response,
+    HttpClientRequest request, {
+    dynamic body,
+  }) {
     _httpClientAdapter.onResponse(response, request, body: body);
   }
 

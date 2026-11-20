@@ -22,34 +22,37 @@ class _AliceCallRequestWidget
     List<Widget> rows = [];
     rows.add(getListRow("Started:", _call.request?.time.toString() ?? ''));
     rows.add(getListRow("Bytes sent:", formatBytes(_call.request?.size ?? 0)));
-    rows.add(getListRow(
-        "Content type:", getContentType(_call.request?.headers ?? {})));
+    rows.add(
+      getListRow("Content type:", getContentType(_call.request?.headers ?? {})),
+    );
 
     var body = _call.request?.body;
     var bodyContent = "Body is empty";
     if (body != null) {
-      bodyContent =
-          formatBody(body, getContentType(_call.request?.headers ?? {}));
+      bodyContent = formatBody(
+        body,
+        getContentType(_call.request?.headers ?? {}),
+      );
     }
     rows.add(getListRow("Body:", bodyContent));
     var formDataFields = _call.request?.formDataFields;
     if (formDataFields?.isNotEmpty == true) {
       rows.add(getListRow("Form data fields: ", ""));
-      formDataFields?.forEach(
-        (field) {
-          rows.add(getListRow("   • ${field.name}:", "${field.value}"));
-        },
-      );
+      formDataFields?.forEach((field) {
+        rows.add(getListRow("   • ${field.name}:", "${field.value}"));
+      });
     }
     var formDataFiles = _call.request?.formDataFiles;
     if (formDataFiles?.isNotEmpty == true) {
       rows.add(getListRow("Form data files: ", ""));
-      formDataFiles?.forEach(
-        (field) {
-          rows.add(getListRow("   • ${field.fileName}:",
-              "${field.contentType} / ${field.length} B"));
-        },
-      );
+      formDataFiles?.forEach((field) {
+        rows.add(
+          getListRow(
+            "   • ${field.fileName}:",
+            "${field.contentType} / ${field.length} B",
+          ),
+        );
+      });
     }
 
     var headers = _call.request?.headers;

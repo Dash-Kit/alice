@@ -52,10 +52,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: _searchEnabled ? _buildSearchField() : _buildTitleWidget(),
-          actions: [
-            _buildSearchButton(),
-            _buildMenuButton(),
-          ],
+          actions: [_buildSearchButton(), _buildMenuButton()],
         ),
         body: _buildCallsListWrapper(),
       ),
@@ -69,10 +66,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   }
 
   Widget _buildSearchButton() {
-    return IconButton(
-      icon: Icon(Icons.search),
-      onPressed: _onSearchClicked,
-    );
+    return IconButton(icon: Icon(Icons.search), onPressed: _onSearchClicked);
   }
 
   void _onSearchClicked() {
@@ -92,16 +86,16 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
         return _menuItems.map((AliceMenuItem item) {
           return PopupMenuItem<AliceMenuItem>(
             value: item,
-            child: Row(children: [
-              Icon(
-                item.iconData,
-                color: AliceConstants.lightRed(widget.customColors),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-              ),
-              Text(item.title)
-            ]),
+            child: Row(
+              children: [
+                Icon(
+                  item.iconData,
+                  color: AliceConstants.lightRed(widget.customColors),
+                ),
+                Padding(padding: EdgeInsets.only(left: 10)),
+                Text(item.title),
+              ],
+            ),
           );
         }).toList();
       },
@@ -119,7 +113,9 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
       decoration: InputDecoration(
         hintText: "Search http request...",
         hintStyle: TextStyle(
-            fontSize: 16.0, color: AliceConstants.grey(widget.customColors)),
+          fontSize: 16.0,
+          color: AliceConstants.grey(widget.customColors),
+        ),
         border: InputBorder.none,
       ),
       style: TextStyle(fontSize: 16.0),
@@ -147,8 +143,10 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
         String query = _queryTextEditingController.text.trim();
         if (query.isNotEmpty) {
           calls = calls
-              .where((call) =>
-                  call.endpoint.toLowerCase().contains(query.toLowerCase()))
+              .where(
+                (call) =>
+                    call.endpoint.toLowerCase().contains(query.toLowerCase()),
+              )
               .toList();
         }
         if (calls.isNotEmpty) {
@@ -164,35 +162,38 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 32),
       child: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(
-            Icons.error_outline,
-            color: AliceConstants.orange(widget.customColors),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            "There are no calls to show",
-            style: TextStyle(fontSize: 18),
-          ),
-          const SizedBox(height: 12),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              "• Check if you send any http request",
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: AliceConstants.orange(widget.customColors),
             ),
-            Text(
-              "• Check your Alice configuration",
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
+            const SizedBox(height: 6),
+            Text("There are no calls to show", style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "• Check if you send any http request",
+                  style: TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Check your Alice configuration",
+                  style: TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Check search filters",
+                  style: TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            Text(
-              "• Check search filters",
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            )
-          ])
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -202,7 +203,10 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
       itemCount: calls.length,
       itemBuilder: (context, index) {
         return AliceCallListItemWidget(
-            calls[index], _onListItemClicked, widget.customColors);
+          calls[index],
+          _onListItemClicked,
+          widget.customColors,
+        );
       },
     );
   }
@@ -212,7 +216,10 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
       widget._aliceCore.getContext()!,
       MaterialPageRoute(
         builder: (context) => AliceCallDetailsScreen(
-            call, widget._aliceCore, widget.customColors),
+          call,
+          widget._aliceCore,
+          widget.customColors,
+        ),
       ),
     );
   }

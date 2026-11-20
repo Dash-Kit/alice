@@ -44,7 +44,8 @@ class AliceCore {
     var context = getContext();
     if (context == null) {
       print(
-          "Cant start Alice HTTP Inspector. Please add NavigatorKey to your application");
+        "Cant start Alice HTTP Inspector. Please add NavigatorKey to your application",
+      );
       return;
     }
     if (!_isInspectorOpened) {
@@ -96,7 +97,8 @@ class AliceCore {
     selectedCall.loading = false;
     selectedCall.response = response;
     if (selectedCall.request?.time.millisecondsSinceEpoch != null) {
-      selectedCall.duration = response.time.millisecondsSinceEpoch -
+      selectedCall.duration =
+          response.time.millisecondsSinceEpoch -
           selectedCall.request!.time.millisecondsSinceEpoch;
     }
 
@@ -115,6 +117,8 @@ class AliceCore {
     callsSubject.add([]);
   }
 
-  AliceHttpCall? _selectCall(int requestId) => callsSubject.value
-      .firstWhere((call) => call.id == requestId, orElse: null);
+  AliceHttpCall? _selectCall(int requestId) => callsSubject.value.firstWhere(
+    (call) => call.id == requestId,
+    orElse: null,
+  );
 }

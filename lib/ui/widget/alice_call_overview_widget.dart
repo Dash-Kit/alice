@@ -28,7 +28,8 @@ class _AliceCallOverviewWidget
     rows.add(getListRow("Duration:", formatDuration(_call.duration)));
     rows.add(getListRow("Bytes sent:", formatBytes(_call.request?.size ?? 0)));
     rows.add(
-        getListRow("Bytes received:", formatBytes(_call.response?.size ?? 0)));
+      getListRow("Bytes received:", formatBytes(_call.response?.size ?? 0)),
+    );
     rows.add(getListRow("Client:", _call.client));
     rows.add(getListRow("Secure:", _call.secure.toString()));
     return Container(
