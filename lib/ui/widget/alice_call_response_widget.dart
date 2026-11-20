@@ -47,7 +47,7 @@ class _AliceCallResponseWidgetState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new CircularProgressIndicator(),
-            Text("Awaiting response...")
+            Text("Awaiting response..."),
           ],
         ),
       );
@@ -120,7 +120,7 @@ class _AliceCallResponseWidgetState
               Text(
                 "Body: Image",
                 style: TextStyle(fontWeight: FontWeight.bold),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -128,18 +128,22 @@ class _AliceCallResponseWidgetState
             _call.uri,
             fit: BoxFit.fill,
             headers: _buildRequestHeaders(),
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          (loadingProgress.expectedTotalBytes ?? 1)
-                      : null,
-                ),
-              );
-            },
+            loadingBuilder:
+                (
+                  BuildContext context,
+                  Widget child,
+                  ImageChunkEvent? loadingProgress,
+                ) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                                (loadingProgress.expectedTotalBytes ?? 1)
+                          : null,
+                    ),
+                  );
+                },
           ),
           const SizedBox(height: 8),
         ],
@@ -158,13 +162,18 @@ class _AliceCallResponseWidgetState
     if (_showLargeBody) {
       return _buildTextBodyRows();
     } else {
-      rows.add(getListRow("Body:",
-          "Too large to show (${response.body.toString().length} Bytes)"));
+      rows.add(
+        getListRow(
+          "Body:",
+          "Too large to show (${response.body.toString().length} Bytes)",
+        ),
+      );
       rows.add(const SizedBox(height: 8));
       rows.add(
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: AliceConstants.lightRed(widget.customColors)),
+            backgroundColor: AliceConstants.lightRed(widget.customColors),
+          ),
           child: Text("Show body"),
           onPressed: () {
             setState(() {
@@ -206,17 +215,21 @@ class _AliceCallResponseWidgetState
       var bodyContent = formatBody(response.body, getContentType(headers));
       rows.add(getListRow("Body:", bodyContent));
     } else {
-      rows.add(getListRow(
+      rows.add(
+        getListRow(
           "Body:",
           "Unsupported body. Alice can render video/image/text body. "
               "Response has Content-Type: $contentType which can't be handled. "
               "If you're feeling lucky you can try button below to try render body"
-              " as text, but it may fail."));
+              " as text, but it may fail.",
+        ),
+      );
       rows.add(
         ElevatedButton(
           child: Text("Show unsupported body"),
           style: ElevatedButton.styleFrom(
-              backgroundColor: AliceConstants.lightRed(widget.customColors)),
+            backgroundColor: AliceConstants.lightRed(widget.customColors),
+          ),
           onPressed: () {
             setState(() {
               _showUnsupportedBody = true;
@@ -237,24 +250,22 @@ class _AliceCallResponseWidgetState
     }
 
     requestHeaders.addAll(
-      request.headers.map(
-        (String key, dynamic value) {
-          return MapEntry(key, value.toString());
-        },
-      ),
+      request.headers.map((String key, dynamic value) {
+        return MapEntry(key, value.toString());
+      }),
     );
     return requestHeaders;
   }
 
   bool _isImageResponse() {
-    return _getContentTypeOfResponse()
-        .toLowerCase()
-        .contains(_imageContentType);
+    return _getContentTypeOfResponse().toLowerCase().contains(
+      _imageContentType,
+    );
   }
 
   bool _isTextResponse() {
-    String responseContentTypeLowerCase =
-        _getContentTypeOfResponse().toLowerCase();
+    String responseContentTypeLowerCase = _getContentTypeOfResponse()
+        .toLowerCase();
 
     return responseContentTypeLowerCase.contains(_jsonContentType) ||
         responseContentTypeLowerCase.contains(_xmlContentType) ||

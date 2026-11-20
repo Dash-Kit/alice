@@ -17,14 +17,9 @@ abstract class AliceBaseCallDetailsWidgetState<T extends StatefulWidget>
         Padding(padding: EdgeInsets.only(left: 5)),
         Flexible(
           fit: FlexFit.loose,
-          child: Text(
-            value,
-            overflow: TextOverflow.clip,
-          ),
+          child: Text(value, overflow: TextOverflow.clip),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: 18),
-        )
+        Padding(padding: EdgeInsets.only(bottom: 18)),
       ],
     );
   }

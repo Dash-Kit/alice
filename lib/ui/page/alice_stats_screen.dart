@@ -26,14 +26,10 @@ class AliceStatsScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Alice - HTTP Inspector - Stats"),
-        ),
+        appBar: AppBar(title: Text("Alice - HTTP Inspector - Stats")),
         body: Container(
           padding: const EdgeInsets.all(8),
-          child: ListView(
-            children: _buildMainListWidgets(),
-          ),
+          child: ListView(children: _buildMainListWidgets()),
         ),
       ),
     );
@@ -47,15 +43,25 @@ class AliceStatsScreen extends StatelessWidget {
       _getRow("Redirection requests:", "${_getRedirectionRequests()}"),
       _getRow("Error requests:", "${_getErrorRequests()}"),
       _getRow(
-          "Bytes send:", AliceConversionHelper.formatBytes(_getBytesSent())),
-      _getRow("Bytes received:",
-          AliceConversionHelper.formatBytes(_getBytesReceived())),
-      _getRow("Average request time:",
-          "${AliceConversionHelper.formatTime(_getAverageRequestTime())}"),
-      _getRow("Max request time:",
-          "${AliceConversionHelper.formatTime(_getMaxRequestTime())}"),
-      _getRow("Min request time:",
-          "${AliceConversionHelper.formatTime(_getMinRequestTime())}"),
+        "Bytes send:",
+        AliceConversionHelper.formatBytes(_getBytesSent()),
+      ),
+      _getRow(
+        "Bytes received:",
+        AliceConversionHelper.formatBytes(_getBytesReceived()),
+      ),
+      _getRow(
+        "Average request time:",
+        "${AliceConversionHelper.formatTime(_getAverageRequestTime())}",
+      ),
+      _getRow(
+        "Max request time:",
+        "${AliceConversionHelper.formatTime(_getMaxRequestTime())}",
+      ),
+      _getRow(
+        "Min request time:",
+        "${AliceConversionHelper.formatTime(_getMinRequestTime())}",
+      ),
       _getRow("Get requests:", "${_getRequests("GET")} "),
       _getRow("Post requests:", "${_getRequests("POST")} "),
       _getRow("Delete requests:", "${_getRequests("DELETE")} "),
@@ -69,17 +75,9 @@ class AliceStatsScreen extends StatelessWidget {
   Widget _getRow(String label, String value) {
     return Row(
       children: <Widget>[
-        Text(
-          label,
-          style: _getLabelTextStyle(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-        ),
-        Text(
-          value,
-          style: _getValueTextStyle(),
-        )
+        Text(label, style: _getLabelTextStyle()),
+        Padding(padding: EdgeInsets.only(left: 10)),
+        Text(value, style: _getValueTextStyle()),
       ],
     );
   }
@@ -97,26 +95,32 @@ class AliceStatsScreen extends StatelessWidget {
   }
 
   int _getSuccessRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 200 &&
-          call.response!.status < 300)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 200 &&
+            call.response!.status < 300,
+      )
       .toList()
       .length;
 
   int _getRedirectionRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 300 &&
-          call.response!.status < 400)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 300 &&
+            call.response!.status < 400,
+      )
       .toList()
       .length;
 
   int _getErrorRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 400 &&
-          call.response!.status < 600)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 400 &&
+            call.response!.status < 600,
+      )
       .toList()
       .length;
 

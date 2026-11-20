@@ -60,8 +60,11 @@ class AliceHttpClientAdapter {
   }
 
   /// Handles httpClientRequest and adds response to http alice call
-  void onResponse(HttpClientResponse response, HttpClientRequest request,
-      {dynamic body}) async {
+  void onResponse(
+    HttpClientResponse response,
+    HttpClientRequest request, {
+    dynamic body,
+  }) async {
     AliceHttpResponse httpResponse = AliceHttpResponse();
     httpResponse.status = response.statusCode;
 

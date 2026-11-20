@@ -11,7 +11,10 @@ class AliceCallListItemWidget extends StatelessWidget {
   final AliceCustomColors customColors;
 
   const AliceCallListItemWidget(
-      this.call, this.itemClickAction, this.customColors);
+    this.call,
+    this.itemClickAction,
+    this.customColors,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +35,15 @@ class AliceCallListItemWidget extends StatelessWidget {
                       const SizedBox(height: 4),
                       _buildServerRow(),
                       const SizedBox(height: 4),
-                      _buildStatsRow()
+                      _buildStatsRow(),
                     ],
                   ),
                 ),
-                _buildResponseColumn(context)
+                _buildResponseColumn(context),
               ],
             ),
           ),
-          _buildDivider()
+          _buildDivider(),
         ],
       ),
     );
@@ -48,43 +51,37 @@ class AliceCallListItemWidget extends StatelessWidget {
 
   Widget _buildMethodAndEndpointRow(BuildContext context) {
     Color textColor = _getEndpointTextColor(context);
-    return Row(children: [
-      Text(
-        call.method,
-        style: TextStyle(fontSize: 16, color: textColor),
-      ),
-      Padding(
-        padding: EdgeInsets.only(left: 10),
-      ),
-      Flexible(
-        child: Container(
-          child: Text(
-            call.endpoint,
-            overflow: TextOverflow.visible,
-            style: TextStyle(
-              fontSize: 16,
-              color: textColor,
+    return Row(
+      children: [
+        Text(call.method, style: TextStyle(fontSize: 16, color: textColor)),
+        Padding(padding: EdgeInsets.only(left: 10)),
+        Flexible(
+          child: Container(
+            child: Text(
+              call.endpoint,
+              overflow: TextOverflow.visible,
+              style: TextStyle(fontSize: 16, color: textColor),
             ),
           ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 
   Widget _buildServerRow() {
-    return Row(children: [
-      _getSecuredConnectionIcon(call.secure),
-      Expanded(
-        child: Text(
-          call.server,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 14,
+    return Row(
+      children: [
+        _getSecuredConnectionIcon(call.secure),
+        Expanded(
+          child: Text(
+            call.server,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(fontSize: 14),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget _buildStatsRow() {
@@ -92,13 +89,19 @@ class AliceCallListItemWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
-            flex: 1,
-            child: Text(_formatTime(call.request?.time),
-                style: TextStyle(fontSize: 12))),
+          flex: 1,
+          child: Text(
+            _formatTime(call.request?.time),
+            style: TextStyle(fontSize: 12),
+          ),
+        ),
         Flexible(
-            flex: 1,
-            child: Text("${AliceConversionHelper.formatTime(call.duration)}",
-                style: TextStyle(fontSize: 12))),
+          flex: 1,
+          child: Text(
+            "${AliceConversionHelper.formatTime(call.duration)}",
+            style: TextStyle(fontSize: 12),
+          ),
+        ),
         Flexible(
           flex: 1,
           child: Text(
@@ -106,7 +109,7 @@ class AliceCallListItemWidget extends StatelessWidget {
             "${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}",
             style: TextStyle(fontSize: 12),
           ),
-        )
+        ),
       ],
     );
   }
@@ -137,25 +140,19 @@ class AliceCallListItemWidget extends StatelessWidget {
         SizedBox(
           child: new CircularProgressIndicator(
             valueColor: new AlwaysStoppedAnimation<Color>(
-                AliceConstants.lightRed(customColors)),
+              AliceConstants.lightRed(customColors),
+            ),
           ),
           width: 20,
           height: 20,
         ),
       );
-      widgets.add(
-        const SizedBox(
-          height: 4,
-        ),
-      );
+      widgets.add(const SizedBox(height: 4));
     }
     widgets.add(
       Text(
         _getStatus(call.response),
-        style: TextStyle(
-          fontSize: 16,
-          color: _getStatusTextColor(context),
-        ),
+        style: TextStyle(fontSize: 16, color: _getStatusTextColor(context)),
       ),
     );
     return Container(
@@ -217,11 +214,7 @@ class AliceCallListItemWidget extends StatelessWidget {
     }
     return Padding(
       padding: EdgeInsets.only(right: 3),
-      child: Icon(
-        iconData,
-        color: iconColor,
-        size: 12,
-      ),
+      child: Icon(iconData, color: iconColor, size: 12),
     );
   }
 }

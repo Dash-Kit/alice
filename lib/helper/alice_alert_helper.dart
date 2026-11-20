@@ -41,9 +41,7 @@ class AliceAlertHelper {
       context: context,
       builder: (BuildContext buildContext) {
         return Theme(
-          data: ThemeData(
-            brightness: brightness ?? Brightness.light,
-          ),
+          data: ThemeData(brightness: brightness ?? Brightness.light),
           child: AlertDialog(
             title: Text(title),
             content: Text(description),
