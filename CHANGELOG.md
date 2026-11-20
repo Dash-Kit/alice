@@ -1,3 +1,7 @@
+## [3.12.0]
+- Bump `share_plus` to ^13.1.0 (win32 6), so apps can use `flutter_secure_storage` 11
+- Minimum Flutter is 3.38.1, minimum Dart is 3.10.0
+
 ## [3.11.0]
 - Bump `share_plus` to ^12.0.1: on iOS 26 the share sheet didn't open on iPhones
 - Pass `sharePositionOrigin` on every share, so sharing works on iPads too
